@@ -1,0 +1,23 @@
+{
+  "name": "dinamo_networks_modulo_3_nodejs",
+  "version": "1.0.0",
+  "description": "CLI nodejs - modulo 3",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "hsmlink": "index.js"
+  },
+  "author": "Dinamo Networks",
+  "license": "ISC",
+  "dependencies": {
+    "@dinamonetworks/hsm-dinamo": "^4.12.0",
+    "chalk": "^5.3.0",
+    "commander": "^12.1.0",
+    "dotenv": "^16.4.5",
+    "figlet": "^1.7.0",
+    "inquirer": "^10.2.0",
+    "shelljs": "^0.8.5"
+  }
+}

@@ -1,9 +1,10 @@
+const { hsm } = require("@dinamonetworks/hsm-dinamo");
+
 class Hsm {
   user = "";
   password = "";
   host = "";
   port = "";
-  conn;
 
   constructor(user, password, host, port) {
     this.user = user;
@@ -12,8 +13,8 @@ class Hsm {
     this.port = port;
   }
 
-  async connect(config) {
-    return await this.conn.connect({
+  async connect() {
+    return await hsm.connect({
       host: this.host,
       authUsernamePassword: {
         username: this.user,
@@ -22,7 +23,7 @@ class Hsm {
     });
   }
 
-  async disconnect() {
-    await this.conn.disconnect();
+  async disconnect(conn) {
+    await conn.disconnect();
   }
 }

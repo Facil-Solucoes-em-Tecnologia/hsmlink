@@ -3,6 +3,11 @@
 const { program } = require("commander");
 const package = require("./package.json");
 
+function collect(value, previous) {
+  const values = value.split(",").map((v) => v.trim());
+  return previous.concat(values);
+}
+
 program.version(package.version);
 
 program

@@ -1,7 +1,11 @@
 #!/usr/bin/env node
 
-const { program } = require("commander");
+const { Command } = require("commander");
+const program = new Command();
+require("dotenv").config();
+
 const package = require("./package.json");
+const { Ocra } = require("./src/modules/ocra/ocra");
 
 function collect(value, previous) {
   const values = value.split(",").map((v) => v.trim());
@@ -22,28 +26,40 @@ program
     "String que representa o challenger a ser passado para o Ocra - Limite: 128 bytes"
   )
   .argument("<suite>", "String contendo a suite de operações OCRA.")
-  .option("-len", "Tamanho do OTP gerado - aplicar valores entre 6 e 8")
-  .option("-c", "Contador sincronizado entre as partes.")
   .option(
-    "-ph",
+    "-len <length>",
+    "Tamanho do OTP gerado - aplicar valores entre 6 e 8"
+  )
+  .option("-c <counter>", "Contador sincronizado entre as partes.") // Também corrigi os outros que faltavam o valor
+  .option(
+    "-ph <hash>",
     "String que contém um hash conhecido entre as partes durante a execução do algoritmo"
   )
   .option(
-    "-s",
+    "-s <session>",
     "Conjunto de strings que contem informações sobre a sessão em encoding ascii. - Limite: 512 bytes"
   )
   .option(
-    "-ts",
+    "-ts <timestamp>",
     "Número de intervalos de tempo (segundos, minutos, horas ou dias, dependendo da granularidade especificada) desde a meia-noite UTC de 1º de janeiro de 1970 [UT]."
   )
-  .action((ocra) => console.log(ocra));
+  .action(async (key, challenger, suite, options) => {
+    const ocra = new Ocra(
+      key,
+      challenger,
+      suite,
+      options.Len,
+      options.c,
+      options.Ph,
+      options.s,
+      options.Ts
+    );
 
-// program
-//   .command("phgenerate")
-//   .description("Gera um hash usando função de HMAC")
-//   .argument("<key>", "chave de HMAC usada para gerar o hash")
-//   .argument("<hash_mode>", "dados passados para criação do hash")
-//   .action((phgenerate) => console.log(phgenerate));
+    const otp = await ocra.ocraGen();
+
+    console.log(`OTP: ${otp}`);
+    process.exit(0);
+  });
 
 program
   .command("getShadow")

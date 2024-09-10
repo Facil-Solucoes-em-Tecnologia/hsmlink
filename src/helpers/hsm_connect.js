@@ -14,16 +14,25 @@ class Hsm {
   }
 
   async connect() {
-    return await hsm.connect({
-      host: this.host,
-      authUsernamePassword: {
-        username: this.user,
-        password: this.password,
-      },
-    });
+    try {
+      const conn = await hsm.connect({
+        host: this.host,
+        authUsernamePassword: {
+          username: this.user,
+          password: this.password,
+        },
+      });
+
+      return conn;
+    } catch (error) {
+      console.log(error.message);
+      process.exit(1);
+    }
   }
 
   async disconnect(conn) {
     await conn.disconnect();
   }
 }
+
+module.exports = { Hsm };
